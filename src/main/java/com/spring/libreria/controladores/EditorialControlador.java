@@ -31,6 +31,16 @@ public class EditorialControlador {
         return mav;
     }
     
+    @GetMapping("/eliminados")
+    public ModelAndView mostrarEditorialesEliminadas(){
+        ModelAndView mav = new ModelAndView("editoriales-lista-eliminados");
+        List<Editorial> editoriales = servicio.obtenerEditorialEliminada();
+        mav.addObject("editoriales", editoriales);
+        mav.addObject("title", "Tabla de editoriales eliminadas");
+        
+        return mav;
+    }
+    
     @GetMapping("/crear")
     public ModelAndView crearEditorial(){
         ModelAndView mav = new ModelAndView("editoriales-formulario");
@@ -65,6 +75,12 @@ public class EditorialControlador {
     public RedirectView delete(@PathVariable int id){
         servicio.delete(id);
         return new RedirectView("/editoriales");
+    }
+    
+    @PostMapping("/recuperar/{id}")
+    public RedirectView recuperar(@PathVariable int id){
+        servicio.recuperar(id);
+        return new RedirectView("/editoriales/eliminados");
     }
     
 }

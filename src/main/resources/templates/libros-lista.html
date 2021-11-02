@@ -42,7 +42,7 @@
                             <td class="col-md-1 px-md-2" th:text="${libro.ejemplaresPrestados}"></td>
                             <td class="col-md-1 px-md-2" th:text="${libro.ejemplaresRestantes}"></td>
                             <td class="col-md-1 px-md-2 d-flex justify-content-around w-100">
-                                <a class="btn vtn-secondary btn-success btn-sm boton" th:href="@{/libros/editar/__${libro.id}__}">Editar</a>
+                                <a class="btn btn-success btn-sm boton" th:href="@{/libros/editar/__${libro.id}__}">Editar</a>
                                 <form method="POST" th:action="@{/libros/eliminar/__${libro.id}__}">
                                     <button class="btn btn-danger btn-sm boton" type="submit">Eliminar</button>
                                 </form>
@@ -50,6 +50,9 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+             <div class="d-flex justify-content-end">
+                 <a class="btn btn-secondary btn-sm" th:href="@{/libros/eliminados}">Cementerio de libros</a>
             </div>
         </div>        
         <footer th:replace="fragmentos :: footer"></footer>

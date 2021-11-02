@@ -54,28 +54,15 @@ public class LibroService {
         repositorio.save(libro);
     }
     
-    public List<Libro> listarLibros(boolean alta){
-        List<Libro> libros = repositorio.findAll();
-        for (Libro libro : libros) {
-            if(libro.isAlta()!=alta){
-                libros.remove(libro);
-            }
-        }
-        return libros;
-    }
     
     @Transactional(readOnly = true)
     public List<Libro> obtenerLibro() {
-        if(listarLibros(true).isEmpty()){
-            List<Libro> libros = null;
-            return libros;
-        }
-        return listarLibros(true);
+        return repositorio.getByAlta(true);
     }
 
     @Transactional(readOnly = true)
-    public List<Libro> obtenerLibroBorrado() {
-        return listarLibros(false);
+    public List<Libro> obtenerLibroEliminado() {
+        return repositorio.getByAlta(false);
     }
 
     @Transactional

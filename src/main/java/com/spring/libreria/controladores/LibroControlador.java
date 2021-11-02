@@ -42,10 +42,10 @@ public class LibroControlador {
 
     @GetMapping("/eliminados")
     public ModelAndView mostrarLibrosEliminados() {
-        ModelAndView mav = new ModelAndView("libros-lista-borrados");
-        List<Libro> libros = servicio.obtenerLibroBorrado();
+        ModelAndView mav = new ModelAndView("libros-lista-eliminados");
+        List<Libro> libros = servicio.obtenerLibroEliminado();
         mav.addObject("libros", libros);
-        mav.addObject("title", "Tabla de libros borrados");
+        mav.addObject("title", "Tabla de libros eliminados");
 
         return mav;
     }
@@ -100,8 +100,8 @@ public class LibroControlador {
     
         @PostMapping("/recuperar/{id}")
     public RedirectView recuperar(@PathVariable int id) {
-        servicio.delete(id);
-        return new RedirectView("/libros");
+        servicio.recuperar(id);
+        return new RedirectView("/libros/eliminados");
     }
 
 }

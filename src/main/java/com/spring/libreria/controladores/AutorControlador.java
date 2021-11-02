@@ -32,6 +32,16 @@ public class AutorControlador {
         return mav;
     }
     
+    @GetMapping("/eliminados")
+    public ModelAndView mostrarAutoresEliminados(){
+        ModelAndView mav = new ModelAndView("autores-lista-eliminados");
+        List<Autor> autores = servicio.obtenerAutorEliminado();
+        mav.addObject("autores", autores);
+        mav.addObject("title", "Tabla de autores eliminados");
+        
+        return mav;
+    }
+    
     @GetMapping("/crear")
     public ModelAndView crearAutor(){
         ModelAndView mav = new ModelAndView("autores-formulario");
@@ -66,6 +76,12 @@ public class AutorControlador {
     public RedirectView delete(@PathVariable int id){
         servicio.delete(id);
         return new RedirectView("/autores");
+    }
+    
+    @PostMapping("/recuperar/{id}")
+    public RedirectView recuperar(@PathVariable int id){
+        servicio.recuperar(id);
+        return new RedirectView("/autores/eliminados");
     }
     
 }

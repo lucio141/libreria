@@ -14,7 +14,7 @@
             <h1>Listado de editoriales</h1>
             <hr class="mb-5"/>
             <div th:if="${editoriales.isEmpty()}">
-                <h5>Todavía no hay editoriales cargadas. <a th:href="@{/editoriales/crear}">Cargar Editorial.</a></h5>
+                <h5>Actualmente no hay editoriales eliminadas.</h5>
             </div>
             <div class="table-responsive" th:unless="${editoriales.isEmpty()}">
                 <table class="table table-hover table-sm table-bordered" >
@@ -28,9 +28,8 @@
                         <tr th:each="editorial : ${editoriales}">
                             <td class="col-md-2 px-md-2" th:text="${editorial.nombre}"></td>
                             <td class="col-md-2 px-md-2 d-flex justify-content-around w-100">
-                                <a class="btn vtn-secondary btn btn-success btn-sm boton" th:href="@{/editoriales/editar/__${editorial.id}__}">Editar</a>
-                                <form method="POST" th:action="@{/editoriales/eliminar/__${editorial.id}__}">
-                                    <button class="btn btn-danger btn-sm boton" type="submit">Eliminar</button>
+                                <form method="POST" th:action="@{/editoriales/recuperar/__${editorial.id}__}">
+                                    <button class="btn btn-success btn-sm boton" type="submit">Recuperar</button>
                                 </form>
                             </td>
                         </tr>
@@ -38,7 +37,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-end">
-                <a class="btn btn-secondary btn-sm" th:href="@{/editoriales/eliminados}">Cementerio de editoriales</a>
+                <a class="btn btn-secondary btn-sm" th:href="@{/editoriales/}">ver editoriales</a>
             </div>
         </div>
         <footer th:replace="fragmentos :: footer"></footer>

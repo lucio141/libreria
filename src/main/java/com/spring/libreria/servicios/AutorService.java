@@ -35,9 +35,14 @@ public class AutorService {
     
     @Transactional(readOnly = true)
     public List<Autor> obtenerAutor(){
-        return repositorio.findAll();
+        return repositorio.getByAlta(true);
     }
     
+    @Transactional(readOnly = true)
+    public List<Autor> obtenerAutorEliminado(){
+        return repositorio.getByAlta(false);
+    }
+        
     @Transactional
     public Autor obtenerPorId(int id){
         Optional<Autor> autor = repositorio.findById(id);

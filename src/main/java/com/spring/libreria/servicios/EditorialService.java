@@ -30,7 +30,12 @@ public class EditorialService {
 
     @Transactional(readOnly = true)
     public List<Editorial> obtenerEditorial() {
-        return repositorio.findAll();
+        return repositorio.getByAlta(true);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Editorial> obtenerEditorialEliminada() {
+        return repositorio.getByAlta(false);
     }
 
     @Transactional
