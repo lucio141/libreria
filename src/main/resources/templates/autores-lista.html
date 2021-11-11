@@ -9,10 +9,12 @@
     </head>
     <body>
         <nav th:replace="fragmentos :: navbar"></nav> 
-
+        
         <div class="container mt-5 main">
             <h1>Listado de autores</h1>
             <hr class="mb-5"/>
+            <div class="alertt alert-success col-6" th:if="${exito != null}" th:text="${exito}"></div>
+            <div class="alertt alert-danger col-6" th:if="${error != null}" th:text="${error}"></div>
             <div th:if="${autores.isEmpty()}">
                 <h5>Todavía no hay autores cargados. <a th:href="@{/autores/crear}">Cargar autor.</a></h5>
             </div>

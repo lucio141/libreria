@@ -2,6 +2,9 @@
 package com.spring.libreria.servicios;
 
 import com.spring.libreria.entidades.Autor;
+import com.spring.libreria.exceptions.DeletedObjectException;
+import com.spring.libreria.exceptions.NullObjectException;
+import com.spring.libreria.exceptions.RepeatedObjectException;
 import com.spring.libreria.repositorios.AutorRepositorio;
 import java.util.List;
 import java.util.Optional;
@@ -16,20 +19,28 @@ public class AutorService {
     private AutorRepositorio repositorio;
     
     @Transactional
-    public void crearAutor(String nombre){
+    public void crearAutor(String nombre) throws RepeatedObjectException, DeletedObjectException{
         Autor autor = new Autor();
         
         autor.setNombre(nombre);
+        
+        if(obtenerAutor().contains(autor)){
+            throw new RepeatedObjectException("Ya existe un autor registrado con el nombre " + nombre);
+        }else if(obtenerAutorEliminado().contains(autor)){
+            throw new DeletedObjectException("Existe un autor eliminado con el nombre " + nombre + ". ¿Desea recuperarlo?");
+        }
         
         repositorio.save(autor);
     }
     
     @Transactional
-    public void modificarAutor(int id, String nombre){
-        Autor autor = repositorio.getById(id);
+    public void modificarAutor(int id, String nombre) throws NullObjectException{
+        Autor autor = repositorio.findById(id).orElse(null);
         
+        if(autor==null){
+            throw new NullObjectException("No existe un usuario asociado al id " + id);
+        }
         autor.setNombre(nombre);
-        
         repositorio.save(autor);
     }
     
@@ -44,9 +55,14 @@ public class AutorService {
     }
         
     @Transactional
-    public Autor obtenerPorId(int id){
-        Optional<Autor> autor = repositorio.findById(id);
-        return  autor.orElse(null);
+    public Autor obtenerPorId(int id) throws NullObjectException{
+        Autor autor = repositorio.findById(id).orElse(null);
+        
+        if(autor == null){
+            throw new NullObjectException("No existe un usuario asociado al id " + id);
+        }
+        
+        return  autor;
     }
     
     @Transactional

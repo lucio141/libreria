@@ -2,8 +2,15 @@
 package com.spring.libreria.controladores;
 
 import com.spring.libreria.entidades.Autor;
+import com.spring.libreria.exceptions.DeletedObjectException;
+import com.spring.libreria.exceptions.NullObjectException;
+import com.spring.libreria.exceptions.RepeatedObjectException;
 import com.spring.libreria.servicios.AutorService;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -23,11 +32,20 @@ public class AutorControlador {
    
     
     @GetMapping()
-    public ModelAndView mostrarAutores(){
+    public ModelAndView mostrarAutores(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("autores-lista");
+        Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+        
+        if(map != null){
+            mav.addObject("exito", map.get("exito"));
+            mav.addObject("error", map.get("error"));
+            mav.addObject("error-removed", map.get("error-removed"));
+        }
+        
         List<Autor> autores = servicio.obtenerAutor();
         mav.addObject("autores", autores);
         mav.addObject("title", "Tabla de autores");
+        
         
         return mav;
     }
@@ -52,23 +70,43 @@ public class AutorControlador {
     }
     
     @GetMapping("/editar/{id}")
-    public ModelAndView editarAutor(@PathVariable int id){
+    public ModelAndView editarAutor(@PathVariable int id, RedirectAttributes attributes){
         ModelAndView mav = new ModelAndView("autores-formulario");
-        mav.addObject("autor", servicio.obtenerPorId(id));
+        try {
+            mav.addObject("autor", servicio.obtenerPorId(id));
+        } catch (NullObjectException ex) {
+            attributes.addFlashAttribute("error", ex.getMessage());
+            mav.setViewName("redirect:/autores");
+        }
         mav.addObject("title", "Editar Autor");
         mav.addObject("action", "modificar");
         return mav;
     }
     
     @PostMapping("/guardar")
-    public RedirectView guardar(@RequestParam String nombre){
-        servicio.crearAutor(nombre);
+    public RedirectView guardar(@RequestParam String nombre, RedirectAttributes attributes){
+        try {
+            servicio.crearAutor(nombre);
+            attributes.addFlashAttribute("exito", "Se ha agregado el autor");
+        } catch (RepeatedObjectException ex) {
+            attributes.addFlashAttribute("error",ex.getMessage());
+            return new RedirectView("/autores/guardar");
+        } catch (DeletedObjectException ex) {
+            attributes.addFlashAttribute("error-removed",ex.getMessage());
+            return new RedirectView("/autores/guardar");
+        }
         return new RedirectView("/autores");
     }
     
     @PostMapping("/modificar")
-    public RedirectView modificar(@RequestParam int id, @RequestParam String nombre){
-        servicio.modificarAutor(id, nombre);
+    public RedirectView modificar(@RequestParam int id, @RequestParam String nombre, RedirectAttributes attributes){
+        try {
+            servicio.modificarAutor(id, nombre);
+            attributes.addFlashAttribute("exito","Se ha modificado el autor exitosamente");
+        } catch (NullObjectException ex) {
+            attributes.addFlashAttribute("error",ex.getMessage());
+            return new RedirectView("/autores");
+        }
         return new RedirectView("/autores");
     }
     
