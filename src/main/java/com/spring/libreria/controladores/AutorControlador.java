@@ -61,8 +61,15 @@ public class AutorControlador {
     }
     
     @GetMapping("/crear")
-    public ModelAndView crearAutor(){
+    public ModelAndView crearAutor(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("autores-formulario");
+        Map<String,?> map = RequestContextUtils.getInputFlashMap(request);
+        
+        if(map!=null){
+            mav.addObject("duplicado", map.get("duplicado"));
+            mav.addObject("eliminado", map.get("eliminado"));            
+        }
+        
         mav.addObject("autor",new Autor());
         mav.addObject("title","Crear Autor");
         mav.addObject("action","guardar");
@@ -70,8 +77,15 @@ public class AutorControlador {
     }
     
     @GetMapping("/editar/{id}")
-    public ModelAndView editarAutor(@PathVariable int id, RedirectAttributes attributes){
+    public ModelAndView editarAutor(@PathVariable int id, RedirectAttributes attributes, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("autores-formulario");
+        Map<String,?> map = RequestContextUtils.getInputFlashMap(request);
+        
+        if(map!=null){
+            mav.addObject("duplicado", map.get("duplicado"));
+            mav.addObject("eliminado", map.get("eliminado"));            
+        }
+        
         try {
             mav.addObject("autor", servicio.obtenerPorId(id));
         } catch (NullObjectException ex) {
@@ -89,11 +103,11 @@ public class AutorControlador {
             servicio.crearAutor(nombre);
             attributes.addFlashAttribute("exito", "Se ha agregado el autor");
         } catch (RepeatedObjectException ex) {
-            attributes.addFlashAttribute("error",ex.getMessage());
-            return new RedirectView("/autores/guardar");
+            attributes.addFlashAttribute("duplicado",ex.getMessage());
+            return new RedirectView("/autores/crear");
         } catch (DeletedObjectException ex) {
-            attributes.addFlashAttribute("error-removed",ex.getMessage());
-            return new RedirectView("/autores/guardar");
+            attributes.addFlashAttribute("eliminado",ex.getMessage());
+            return new RedirectView("/autores/crear");
         }
         return new RedirectView("/autores");
     }
@@ -106,6 +120,12 @@ public class AutorControlador {
         } catch (NullObjectException ex) {
             attributes.addFlashAttribute("error",ex.getMessage());
             return new RedirectView("/autores");
+        } catch (RepeatedObjectException ex) {
+            attributes.addFlashAttribute("duplicado",ex.getMessage());
+            return new RedirectView("/autores/editar/"+id);
+        } catch (DeletedObjectException ex) {
+            attributes.addFlashAttribute("eliminado",ex.getMessage());
+            return new RedirectView("/autores/editar/"+id);
         }
         return new RedirectView("/autores");
     }

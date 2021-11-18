@@ -10,9 +10,20 @@
     <body>
         <nav th:replace="fragmentos :: navbar"></nav> 
         
+        
+        
         <div class="container mt-5 main">
             <h1 th:text="${title}"></h1>
             <hr class="mb-5 col-xl-12"/>
+            <div class="container mt-5 alert-danger alert" th:if="${duplicado != null}">
+            <p th:text="${duplicado}"></p>
+            <a class="btn btn-secondary btn-sm" th:href="@{/autores}">Listado de autores</a>
+        </div>
+        
+        <div class="container mt-5 alert-danger alert" th:if="${eliminado != null}">
+            <p th:text="${eliminado}"></p>
+            <a class="btn btn-secondary btn-sm" th:href="@{/autores/eliminados}">Cementerio de autores</a>
+        </div>
             <form autocomplete="off" class="needs-validation" id="formulario" method="POST"
                   novallidate th:action="@{/autores/__${action}__}" th:object="${autor}">
                 <div class="form-floating mb-3 col-xl-6">

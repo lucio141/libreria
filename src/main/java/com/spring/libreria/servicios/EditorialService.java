@@ -1,7 +1,9 @@
 package com.spring.libreria.servicios;
 
 import com.spring.libreria.entidades.Editorial;
+import com.spring.libreria.entidades.Libro;
 import com.spring.libreria.repositorios.EditorialRepositorio;
+import com.spring.libreria.repositorios.LibroRepositorio;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ public class EditorialService {
 
     @Autowired
     private EditorialRepositorio repositorio;
+
+    @Autowired
+    private LibroRepositorio repositorioLibro;
 
     @Transactional
     public void crearEditorial(String nombre) {
@@ -47,6 +52,10 @@ public class EditorialService {
     @Transactional
     public void delete(int id) {
         repositorio.deleteById(id);
+        
+                for (Libro Libro : repositorio.getById(id).getLibros()) {
+            repositorioLibro.delete(Libro);
+        }
     }
 
     @Transactional
