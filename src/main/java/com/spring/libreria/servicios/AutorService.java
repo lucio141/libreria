@@ -8,7 +8,6 @@ import com.spring.libreria.exceptions.RepeatedObjectException;
 import com.spring.libreria.repositorios.AutorRepositorio;
 import com.spring.libreria.repositorios.LibroRepositorio;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +43,7 @@ public class AutorService {
         Autor autor = repositorio.findById(id).orElse(null);
 
         if (autor == null) {
-            throw new NullObjectException("No existe un usuario asociado al id " + id);
+            throw new NullObjectException("No existe un autor asociado al id " + id);
         }
 
         if (!(nombre.equalsIgnoreCase(autor.getNombre()))) {
@@ -81,11 +80,14 @@ public class AutorService {
 
     @Transactional
     public void delete(int id) {
-        repositorio.deleteById(id);
-        
+       
         for (Libro Libro : repositorio.getById(id).getLibros()) {
             repositorioLibro.delete(Libro);
         }
+
+        repositorio.deleteById(id);
+        
+
     }
 
     @Transactional

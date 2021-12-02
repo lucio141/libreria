@@ -15,34 +15,34 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@SQLDelete (sql = "UPDATE autor SET alta = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE autor SET alta = false WHERE id = ?")
 @EntityListeners(AuditingEntityListener.class)
 public class Autor {
-    
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nombre;
     private boolean alta;
-    @OneToMany (mappedBy = "autor")
+    @OneToMany(mappedBy = "autor")
     private List<Libro> libros;
 
-//    @CreatedDate
-//    @Column(nullable = false, updatable= false)
-//    private LocalDateTime creacion;
-//    
-//    @LastModifiedDate
-//    private LocalDateTime modificaion;
-    
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime creacion;
+
+    @LastModifiedDate
+    private LocalDateTime modificacion;
+
     public Autor() {
-        alta=true;
+        alta = true;
     }
 
     public Autor(int id, String nombre, List<Libro> libros) {
         this.id = id;
         this.nombre = nombre;
         this.alta = true;
-        this.libros=libros;
+        this.libros = libros;
     }
 
     public List<Libro> getLibros() {
@@ -77,6 +77,24 @@ public class Autor {
         this.alta = alta;
     }
 
+    public LocalDateTime getCreacion() {
+        return creacion;
+    }
+
+    public void setCreacion(LocalDateTime creacion) {
+        this.creacion = creacion;
+    }
+
+    public LocalDateTime getModificacion() {
+        return modificacion;
+    }
+
+    public void setModificacion(LocalDateTime modificacion) {
+        this.modificacion = modificacion;
+    }
+    
+    
+
     @Override
     public String toString() {
         return nombre;
@@ -89,8 +107,10 @@ public class Autor {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Autor)) return false;
-        return this.hashCode()==obj.hashCode();
+        if (!(obj instanceof Autor)) {
+            return false;
+        }
+        return this.hashCode() == obj.hashCode();
     }
-    
+
 }
