@@ -1,15 +1,22 @@
 package com.spring.libreria.entidades;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.SQLDelete;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @SQLDelete (sql = "UPDATE editorial SET alta = false WHERE id = ?")
+@EntityListeners(AuditingEntityListener.class)
 public class Editorial {
 
     @Id
@@ -19,6 +26,14 @@ public class Editorial {
     private boolean alta;
     @OneToMany (mappedBy = "editorial")
     private List<Libro> libros;
+    
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime creacion;
+
+    @LastModifiedDate
+    private LocalDateTime modificacion;
+
 
     public Editorial() {
         alta = true;
@@ -62,6 +77,24 @@ public class Editorial {
     public void setAlta(boolean alta) {
         this.alta = alta;
     }
+
+    public LocalDateTime getCreacion() {
+        return creacion;
+    }
+
+    public void setCreacion(LocalDateTime creacion) {
+        this.creacion = creacion;
+    }
+
+    public LocalDateTime getModificacion() {
+        return modificacion;
+    }
+
+    public void setModificacion(LocalDateTime modificacion) {
+        this.modificacion = modificacion;
+    }
+    
+    
 
     @Override
     public String toString() {

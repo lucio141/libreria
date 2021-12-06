@@ -13,6 +13,15 @@
         <div class="container mt-5 main">
             <h1>Listado de libros eliminados</h1>
             <hr class="mb-5"/>
+            <div class="alertt alert-success" th:if="${exito != null}" th:text="${exito}"></div>
+            <div class="container mt-5 alert-danger alert" th:if="${autorRemoved != null}">
+                <p th:text="${autorRemoved}"></p>
+                <a class="btn btn-secondary btn-sm" th:href="@{/autores/eliminados}">Cementerio de autores</a>
+            </div>
+             <div class="container mt-5 alert-danger alert" th:if="${editorialRemoved != null}">
+                <p th:text="${editorialRemoved}"></p>
+                <a class="btn btn-secondary btn-sm" th:href="@{/editoriales/eliminados}">Cementerio de editoriales</a>
+            </div>
             <div th:if="${libros.isEmpty()}">
                 <h5>Actualmente no hay libros eliminados.</a></h5>
             </div>

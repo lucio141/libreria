@@ -8,8 +8,6 @@ import com.spring.libreria.exceptions.RepeatedObjectException;
 import com.spring.libreria.servicios.AutorService;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

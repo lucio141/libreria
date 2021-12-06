@@ -14,6 +14,17 @@
         <div class="container mt-5 main">
             <h1 th:text="${title}"></h1>
             <hr class="mb-5 col-xl-12"/>
+
+            <div class="container mt-5 alert-danger alert" th:if="${duplicado != null}">
+                <p th:text="${duplicado}"></p>
+                <a class="btn btn-secondary btn-sm" th:href="@{/libros}">Listado de autores</a>
+            </div>
+
+            <div class="container mt-5 alert-danger alert" th:if="${eliminado != null}">
+                <p th:text="${eliminado}"></p>
+                <a class="btn btn-secondary btn-sm" th:href="@{/libros/eliminados}">Cementerio de autores</a>
+            </div>
+
             <form autocomplete="off" class="needs-validation" id="formulario" method="POST"
                   novallidate th:action="@{/libros/__${action}__}" th:object="${libro}">
                 <input th:field="*{id}" type="hidden"/>

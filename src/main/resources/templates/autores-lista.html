@@ -9,7 +9,7 @@
     </head>
     <body>
         <nav th:replace="fragmentos :: navbar"></nav> 
-        
+
         <div class="container mt-5 main">
             <h1>Listado de autores</h1>
             <hr class="mb-5"/>
@@ -23,12 +23,17 @@
                     <thead class="table-secondary text-center">
                         <tr>
                             <th class="col-md-3 px-md-2" scope="col">nombre</th>
+                            <th class="col-md-3 px-md-2" scope="col">creación</th>
+                            <th class="col-md-3 px-md-2" scope="col">última modif</th>
                             <th class="col-md-3 px-md-2" scope="col">acciones</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="autor : ${autores}">
                             <td class="col-md-3 px-md-2" th:text="${autor.nombre}"></td>
+                            <td class="col-md-3 px-md-2" th:text="${#temporals.format(autor.creacion,'dd-MM-yyy HH:mm')}"></td>
+                            <td class="col-md-3 px-md-2" th:text="${#temporals.format(autor.modificacion,'dd-MM-yyy HH:mm')}"></td>   
                             <td class="col-md-6 px-md-4 d-flex justify-content-around w-100">
                                 <a class="btn vtn-secondary btn-success btn-sm boton" th:href="@{/autores/editar/__${autor.id}__}">Editar</a>
                                 <form method="POST" th:action="@{/autores/eliminar/__${autor.id}__}">
@@ -39,8 +44,8 @@
                     </tbody>
                 </table>
             </div>
-                         <div class="d-flex justify-content-end">
-                 <a class="btn btn-secondary btn-sm" th:href="@{/autores/eliminados}">Cementerio de autores</a>
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-secondary btn-sm" th:href="@{/autores/eliminados}">Cementerio de autores</a>
             </div>
         </div>
 
